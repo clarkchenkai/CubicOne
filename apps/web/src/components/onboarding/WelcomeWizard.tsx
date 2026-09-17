@@ -192,9 +192,9 @@ export function WelcomeWizard({
           title="Set up CubicOne"
           identity={
             <div className="flex items-baseline gap-1.5" role="img" aria-label="CubicOne">
-              <T3Wordmark className="h-4 w-auto shrink-0" aria-hidden />
+              <T3Wordmark className="h-5 w-auto shrink-0 self-center" aria-hidden />
               <span className="text-[1.4rem] font-medium tracking-tight text-muted-foreground">
-                Code
+                CubicOne
               </span>
             </div>
           }
