@@ -123,7 +123,7 @@ describe("orchestration projector", () => {
           projects: [
             {
               id: ProjectId.make("project-1"),
-              title: "T3 Code",
+              title: "CubicOne",
               workspaceRoot: "/repo",
               defaultModelSelection: null,
               scripts: [],
