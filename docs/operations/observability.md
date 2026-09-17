@@ -1,8 +1,8 @@
 # Observability
 
-> For maintainers. Using T3 Code? See [docs/user](../user/).
+> For maintainers. Using CubicOne? See [docs/user](../user/).
 
-T3 Code has one server-side observability model:
+CubicOne has one server-side observability model:
 
 - pretty logs go to stdout for humans
 - completed spans go to a local NDJSON trace file
@@ -10,7 +10,7 @@ T3 Code has one server-side observability model:
 
 The local trace file is the persisted source of truth for normal local launches. Those launches do not
 write a separate server log file, but SSH-managed launches also persist the remote process's
-stdout/stderr at `~/.t3/ssh-launch/<state>/server.log`.
+stdout/stderr at `~/.cubicone/ssh-launch/<state>/server.log`.
 
 ## Where To Find Things
 
@@ -21,7 +21,7 @@ Logs are human-facing:
 - destination: stdout
 - format: `Logger.consolePretty()`
 - normal local persistence: none
-- SSH-managed launch persistence: `~/.t3/ssh-launch/<state>/server.log`
+- SSH-managed launch persistence: `~/.cubicone/ssh-launch/<state>/server.log`
 
 If you want a log message to show up in the trace file, emit it inside an active span with `Effect.log...`. `Logger.tracerLogger` will attach it as a span event.
 
@@ -29,10 +29,10 @@ If you want a log message to show up in the trace file, emit it inside an active
 
 Completed spans are written as NDJSON records to `serverTracePath`. The default depends on how the
 server starts: production and explicitly configured homes use
-`<home>/userdata/logs/server.trace.ndjson` (so `~/.t3/userdata/...` by default, or
+`<home>/userdata/logs/server.trace.ndjson` (so `~/.cubicone/userdata/...` by default, or
 `/custom/path/userdata/...` with `--home-dir /custom/path`), a linked worktree dev run uses
 `<worktree>/.t3/userdata/logs/server.trace.ndjson`, and an implicit dev run outside a linked
-worktree uses `~/.t3/dev/logs/server.trace.ndjson`.
+worktree uses `~/.cubicone/dev/logs/server.trace.ndjson`.
 
 Important fields common to both record types:
 
@@ -161,7 +161,7 @@ macOS app bundle example:
 T3CODE_OTLP_TRACES_URL=http://localhost:4318/v1/traces \
 T3CODE_OTLP_METRICS_URL=http://localhost:4318/v1/metrics \
 T3CODE_OTLP_SERVICE_NAME=t3-desktop \
-"/Applications/T3 Code.app/Contents/MacOS/T3 Code"
+"/Applications/CubicOne.app/Contents/MacOS/CubicOne"
 ```
 
 Direct binary example:
@@ -201,7 +201,7 @@ TRACE_FILE="$WORKTREE/.t3/userdata/logs/server.trace.ndjson"
 Only an implicit dev run outside a linked worktree uses the shared dev directory:
 
 ```bash
-TRACE_FILE="$HOME/.t3/dev/logs/server.trace.ndjson"
+TRACE_FILE="$HOME/.cubicone/dev/logs/server.trace.ndjson"
 ```
 
 Tail the selected file:

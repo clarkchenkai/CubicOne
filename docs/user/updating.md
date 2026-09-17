@@ -1,4 +1,4 @@
-# Updating T3 Code
+# Updating CubicOne
 
 The app you use and the server running your agents can be on different machines.
 When a server is behind your web or desktop app, an update notice appears in the
@@ -15,7 +15,7 @@ Enable it to resume supported active threads after an update, crash, or machine
 restart. Changes are saved to connected environments that support this setting;
 update older servers first. If a supported environment was offline or has a
 different value, use **Apply to all** in Settings after it connects.
-T3 Code must start again on that machine;
+CubicOne must start again on that machine;
 the setting does not enable automatic startup. Terminal commands may still be
 interrupted, and threads without saved provider resume state need a new message.
 If you previously enabled continuation for updates, enable this setting once
@@ -58,8 +58,9 @@ update can roll back to the previous version. If the update still fails:
 
 ## Mobile updates
 
-Install App Store or Google Play releases as usual. The mobile app can also
-download updates in the background and apply them when you next leave the app.
+CubicOne's mobile app is built from source, so rebuild and reinstall it to
+update. A build configured with an update server can also download updates in
+the background and apply them when you next leave the app.
 It saves drafts and queued messages before restarting. If you keep the app open
 for a long time, it may ask to install immediately; choosing **Later** leaves the
 update queued for the next suitable moment.
