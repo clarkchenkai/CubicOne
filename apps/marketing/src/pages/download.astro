@@ -108,13 +108,13 @@ const imageProps = {
           <svg class="platform-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7l5 5-5 5M12 17h7"/></svg>
           <h2 class="platform-name">Terminal</h2>
         </div>
-        <code class="cli-line cli-line--stable">curl -fsSL https://t3.codes/install.sh | sh</code>
-        <code class="cli-line cli-line--stable">irm https://t3.codes/install.ps1 | iex</code>
-        <code class="cli-line cli-line--nightly">curl -fsSL https://t3.codes/install.sh | T3CODE_CHANNEL=nightly sh</code>
-        <code class="cli-line cli-line--nightly">$env:T3CODE_CHANNEL="nightly"; irm https://t3.codes/install.ps1 | iex</code>
-        <p class="cli-note">Or try it once without installing:</p>
-        <code class="cli-line cli-line--stable">npx t3@latest</code>
-        <code class="cli-line cli-line--nightly">npx t3@nightly</code>
+        <p class="cli-note">Build the server from source:</p>
+        <code class="cli-line cli-line--stable">git clone https://github.com/clarkchenkai/CubicOne &amp;&amp; cd CubicOne</code>
+        <code class="cli-line cli-line--stable">vp i &amp;&amp; vp run build:desktop</code>
+        <code class="cli-line cli-line--stable">node apps/server/dist/bin.mjs</code>
+        <code class="cli-line cli-line--nightly">git checkout main &amp;&amp; git pull upstream main</code>
+        <code class="cli-line cli-line--nightly">vp i &amp;&amp; vp run build:desktop</code>
+        <code class="cli-line cli-line--nightly">node apps/server/dist/bin.mjs</code>
       </section>
     </div>
 
