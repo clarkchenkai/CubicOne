@@ -1,19 +1,23 @@
-# T3 Code
+# CubicOne
 
-T3 Code is an "agent harness control surface". It enables control of the agents on your machine with a best-in-class mobile app ([iOS](https://apps.apple.com/us/app/t3-code-remote-claude-more/id6787819824), [Android](https://play.google.com/store/apps/details?id=com.t3tools.t3code)), [web app](https://app.t3.codes) and [Electron-based desktop app](https://t3.codes).
+CubicOne is a personal fork of [T3 Code](https://github.com/pingdotgg/t3code), an open-source control surface for coding agents. A Node WebSocket server wraps the agent CLIs on your machine and serves a desktop app, a web app, and a mobile app that can control them locally or remotely.
 
-Works with your subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, and Google Antigravity. If they're set up on your computer, T3 Code can control them.
+Works with your own subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, and Google Antigravity. If they are set up on your computer, CubicOne can drive them.
 
-## "Wait, what are you selling me?"
+## What is different from T3 Code
 
-Nothing. We built T3 Code because we wanted the best possible development experience with agents. We were inspired by existing solutions like the Codex desktop app, Conductor, Claude Desktop and Cursor Glass, but none met our bar.
+- Branding: app name, icon (orange tile with a white "1"), wordmarks, and user-facing copy.
+- Isolation: bundle id `com.cubic.cubicone`, Electron user data in `cubicone-code`, and state under `~/.cubicone` instead of `~/.t3`, so CubicOne runs side by side with an installed T3 Code without sharing a server or database.
+- No hosted cloud: T3 Connect, the hosted web app, and the store-distributed mobile apps are upstream services. CubicOne ships without them unless you configure your own.
 
-We wanted something performant, remote-ready, and truly open. If we ever go the wrong direction, we want you to have everything you need to fork and build the editor that you want.
+Everything else follows upstream. Internal identifiers such as `@t3tools/*` package names, `T3CODE_*` environment variables, the `t3code://` URL scheme, and the `t3.json` project file are kept unchanged to make upstream merges cheap.
 
 ## Installation
 
+CubicOne is built from source. There is no install script, Homebrew cask, or package registry entry.
+
 > [!WARNING]
-> T3 Code currently supports Codex, Claude, Cursor, Grok Build, OpenCode, and Antigravity. Install and authenticate at least one provider before use:
+> Install and authenticate at least one provider before use:
 >
 > - Codex: install [Codex CLI](https://developers.openai.com/codex/cli) and run `codex login`
 > - Claude: install [Claude Code](https://claude.com/product/claude-code) and run `claude auth login`
@@ -22,63 +26,43 @@ We wanted something performant, remote-ready, and truly open. If we ever go the 
 > - OpenCode: install [OpenCode](https://opencode.ai) and run `opencode auth login`
 > - Antigravity: enable it in Settings, then use **Install Antigravity** and **Sign in with Google**. No CLI is required.
 
-### Command line
+### Prerequisites
+
+- Node.js 24 (`engines.node` in `package.json`)
+- pnpm 11.10 (`corepack use pnpm@11.10.0`)
+- [Vite+](https://viteplus.dev/guide/) for the global `vp` command:
 
 ```bash
-curl -fsSL https://t3.codes/install.sh | sh
+curl -fsSL https://vite.plus | bash
 ```
 
 On Windows, in PowerShell:
 
 ```powershell
-irm https://t3.codes/install.ps1 | iex
+irm https://vite.plus/ps1 | iex
 ```
 
-Then run `t3` to start the server and open the local web app. `t3 service install` keeps it running in the background, `t3 update` moves to a newer release, and `t3 --help` has the full reference.
-
-To try it once without installing, run `npx t3@latest` instead.
-
-### Desktop app
-
-Install the latest version of the desktop app from [GitHub Releases](https://github.com/pingdotgg/t3code/releases), or from your favorite package registry:
-
-#### Windows (`winget`)
+### Build the desktop app (macOS)
 
 ```bash
-winget install T3Tools.T3Code
+git clone https://github.com/clarkchenkai/CubicOne.git
+cd CubicOne
+vp i
+node scripts/build-desktop-artifact.ts --platform mac --target dmg --arch arm64 --output-dir release
 ```
 
-#### macOS (Homebrew)
+The DMG and a zipped `.app` land in `release/`. Use `--arch x64` for Intel Macs, `--platform linux --target AppImage` or `--platform win --target nsis` for other platforms.
+
+### Run from source
 
 ```bash
-brew install --cask t3-code
+vp run dev            # server and web app
+vp run dev:desktop    # Electron client
 ```
-
-#### Arch Linux (AUR)
-
-Stable:
-
-```bash
-yay -S t3code-bin
-```
-
-Nightly:
-
-```bash
-yay -S t3code-nightly-bin
-```
-
-The AUR packaging is maintained in this repository under [`packaging/aur`](./packaging/aur).
-
-## Some notes
-
-We are very very early in this project. Expect bugs.
-
-We are (mostly) not accepting contributions yet. Small fixes may be considered. Big features will not be.
 
 ## Documentation
 
-Full docs live in [docs/](./docs). There's no docs site yet.
+Full docs live in [docs/](./docs). They are inherited from upstream and still use the T3 Code name in places.
 
 - [Install and first run](./docs/user/install.md)
 - [Permission modes](./docs/user/permission-modes.md)
@@ -88,38 +72,24 @@ Full docs live in [docs/](./docs). There's no docs site yet.
 - [Keeping app and server in sync](./docs/user/updating.md)
 - [Source control integrations](./docs/user/source-control.md)
 - Multiple accounts: [Codex](./docs/user/providers-codex.md) · [Claude](./docs/user/providers-claude.md)
-- [Run T3 Code as a background service](./docs/user/background-service.md)
+- [Run as a background service](./docs/user/background-service.md)
 
-Building from source? Start at [docs/internals/overview.md](./docs/internals/overview.md).
+Building on the code? Start at [docs/internals/overview.md](./docs/internals/overview.md).
 
-## If you REALLY want to contribute still.... read this first
+## Tracking upstream
 
-### Install `vp`
+- `main` mirrors `upstream/main` and is never developed on.
+- `cubicone` is the default and development branch.
 
-T3 Code uses Vite+ so you'll need to install the global `vp` command-line tool.
-
-#### macOS / Linux
-
-```bash
-curl -fsSL https://vite.plus | bash
-```
-
-#### Windows
+To pull in an upstream release:
 
 ```bash
-irm https://vite.plus/ps1 | iex
+git checkout main && git pull upstream main && git push origin main
+git checkout cubicone && git merge main
 ```
 
-Checkout their getting started guide for more information: https://viteplus.dev/guide/
+Resolve conflicts, rebuild, and push `cubicone`.
 
-### Install dependencies
+## License and credit
 
-```bash
-vp i
-```
-
-Read [CONTRIBUTING.md](./CONTRIBUTING.md) before reporting a bug or opening a PR.
-
-Have a feature request? Start an [Ideas discussion](https://github.com/pingdotgg/t3code/discussions/categories/ideas).
-
-Need support? Join the [Discord](https://discord.gg/jn4EGJjrvv).
+MIT, same as upstream. T3 Code is built by [T3 Tools](https://t3.codes); this fork would not exist without their work.
